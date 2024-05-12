@@ -1,0 +1,55 @@
+roulette 
+
+38 slot wheel (american variant)
+
+
+
+the math required:
+
+
+starting credits - 5000 credits (float)
+bet amount - limit to 999 (game ends when credits reach 1) (float)
+
+
+betting combinations: TAGS
+
+// inside bets
+1. "straight up": single number (lowest probability, 1/38) (payout x35) TAGSTRAIGHT
+2. "split": two neighbouring numbers (1/19) (payout x17) TAGSPLIT
+3. "street": three numbers in a line (3/38) (payout x11) TAGSTREET
+
+// outside bets
+4. red: all red numbers (18/38) (payout x1) TAGRED
+5. black: all black numbers (18/38) (payout x1) TAGBLACK
+6. 1-18: numbers from 1 to 18 (18/38) (payout x1) TAGCOMBO1
+7. 19-36: numbers from 19 to 36 (18/38) (payout x1) TAGCOMBO2
+8. "column": numbers on any of the three available columns (12/38) (payout x2) TAGCOMBO3
+9. "dozen": a third of the board (12/38) (payout x2) TAGCOMBO4
+
+
+
+prob1: number (winnings1 = bet + bet x payout ---- win: credits = credits + winnings1, lose: credits = credits - bet)
+prob2: combination (winnings2 = bet + bet x payout ---- win: credits = credits + winnings2, lose: credits = credits - bet) 
+
+combo: prob1 or prob2
+if prob1 && ~prob2:
+	credits = credits + winnings
+elseif prob2 && ~prob1:
+	credits = credits - bet
+elseif prob1 && prob2:
+	credits = credits + winnings1 + winnings2
+else
+	credits = credits - bet
+
+random number generator used here: format -> generatedNumber = corresponding bet placed by the player
+    0 - 36
+    37 = 00
+    38 = split
+    39 = street (1/2/3, 4/5/6, 7/8/9, 10/11/12, 13/14/15, 16/17/18, 19/20/21, 22/23/24, 25/26/27, 28/29/30, 31/32/33, 34/35/36)
+    40 = red (1/3/5/7/9/12/14/16/18/19/21/21/23/25/27/30/32/34/36)
+    41 = black (2/4/6/8/10/11/13/15/17/20/22/24/26/28/29/31/33/35)
+    42 = combo1 (1/2/3/4/5/6/7/8/9/10/11/12/13/14/15/16/17/18)
+    43 = combo2 (19/20/21/22/23/24/25/26/27/28/29/30/31/32/33/34/35/36)
+    44 = combo3 (1/4/7/10/13/16/19/22/25/28/31/34, 2/5/8/11/14/17/20/23/26/29/32/35, 3/6/9/12/15/18/21/24/27/30/33/36)
+    45 = combo4 (1/2/3/4/5/6/7/8/9/10/11/12, 13/14/15/16/17/18/19/20/21/22/23/24, 25/26/27/28/29/30/31/32/33/34/35/36)
+
